@@ -1,18 +1,22 @@
 import time
 import tracemalloc
+from itertools import chain
 def conflict(col, row, solution):
-    for r, c in enumerate(solution):
-        if c == col or abs(c-col) == abs(r-row):
-            return True
+    for r, c in enumerate(solution):  # r=head(index), c=tail(value)
+            if c == col or abs(c-col) == abs(r-row):#
+              return True
     return False
 
-def search(n, row, solution):
+def search(n, row, solution):               
     if row == n:
         return [solution]
     results = []
-    for col in range(n):
-        if not conflict(col, row, solution):
-            results += search(n, row+1, solution + (col,))
+    # Higher-Order Functions
+    valid_cols = filter(lambda c: not conflict(c, row, solution), range(n))
+    results = list(chain.from_iterable(
+        search(n, row + 1, solution + (col,))
+        for col in valid_cols
+    ))
     return results
 
 def solve_functional(n):
@@ -29,7 +33,6 @@ def time_functional(n):
     return (end - start), len(s)
 
  
-# قياس الذاكرة Functional
 def memory_functional(n):
   tracemalloc.start()
   _ = solve_functional(n)
