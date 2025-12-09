@@ -1,22 +1,19 @@
 import time
 import tracemalloc
-from itertools import chain
+
 def conflict(col, row, solution):
     for r, c in enumerate(solution):  # r=head(index), c=tail(value)
             if c == col or abs(c-col) == abs(r-row):#
               return True
     return False
-    
+
 def search(n, row, solution):               
     if row == n:
         return [solution]
     results = []
-    # Higher-Order Functions
-    valid_cols = filter(lambda c: not conflict(c, row, solution), range(n))
-    results = list(chain.from_iterable(
-        search(n, row + 1, solution + (col,))
-        for col in valid_cols
-    ))
+    for col in range(n):
+        if not conflict(col, row, solution):
+            results += search(n, row+1, solution + (col,))# {0,2}
     return results
 
 def solve_functional(n):
