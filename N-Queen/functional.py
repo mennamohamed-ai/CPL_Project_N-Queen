@@ -6,7 +6,7 @@ def conflict(col, row, solution):
             if c == col or abs(c-col) == abs(r-row):#
               return True
     return False
-
+    
 def search(n, row, solution):               
     if row == n:
         return [solution]
